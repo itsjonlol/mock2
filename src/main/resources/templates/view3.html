@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Registered failed for the following reasons:</h1>
+    <div th:if="${isEventFull}" >
+        <p> Your request for tickets exceeded the event size</p>
+    </div>
+    <div th:if="${!isUserOver21}">
+        <p>You must be over 21 to register for an event</p>
+    </div>
+   
+
+    <a th:href="@{/events/listing}">Go back to listing</a>
+   
+
+    
+</body>
+</html>
