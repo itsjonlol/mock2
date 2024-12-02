@@ -55,7 +55,7 @@ public class RegistrationController {
         event.setParticipants(event.getParticipants() + user.getTicketsNumber());
         databaseService.updateEventParticipation(event);
 
-        
+        //to pass on attributes. BUT must be a redirect
         redirectAttributes.addFlashAttribute("eventsuccess",event);
 
         return "redirect:/registration/register";

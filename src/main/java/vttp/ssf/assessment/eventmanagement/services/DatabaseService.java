@@ -1,7 +1,6 @@
 package vttp.ssf.assessment.eventmanagement.services;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Period;
@@ -11,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import jakarta.json.Json;
@@ -31,12 +31,14 @@ public class DatabaseService {
     // TODO: Task 1
     // 
     // // "eventId": 1,
-	// 	"eventName": "Christmas Eve Party",
-	// 	"eventSize": 20,
-	// 	"eventDate": 1703415600000,
-	// 	"participants": 0
-    public List<Event> readFile(String fileName) throws FileNotFoundException  {
-        InputStream is = new FileInputStream(fileName);
+    // 	"eventName": "Christmas Eve Party",
+    // 	"eventSize": 20,
+    // 	"eventDate": 1703415600000,
+    // 	"participants": 0
+    public List<Event> readFile(String fileName) throws IOException  {
+        // InputStream is = new FileInputStream(fileName);
+        ClassPathResource resource = new ClassPathResource(fileName);
+        InputStream is = resource.getInputStream();
         JsonReader reader = Json.createReader(is);
         JsonArray eventsJsonArray = reader.readArray();
         
@@ -59,36 +61,6 @@ public class DatabaseService {
             events.add(event);
             
         }
-        // FileReader reader = new FileReader(fileName);
-        // BufferedReader br = new BufferedReader(reader);
-        // String line ="";
-        // Event event = new Event();
-        // while ((line=br.readLine())!=null) {
-            
-        //     if (line.contains("eventId")) {
-        //         String[] tokens = line.split(":");
-        //         if (tokens[1].trim().endsWith(",")) {
-        //             tokens[1] = tokens[1].trim().substring(0,tokens[1].length()-1); //remove the comma
-        //         }
-        //         String eventIdString = tokens[1].trim();
-        //         event.setEventId(Integer.parseInt(eventIdString));
-        //     } else if (line.contains("eventName")) {
-        //         String[] tokens = line.split(":");
-        //         if (tokens[1].trim().endsWith(",")) {
-        //             tokens[1] = tokens[1].trim().substring(0,tokens[1].length()-1); //remove the comma
-        //         }
-        //         String eventNameString = tokens[1].trim();
-        //         event.setEventName(eventNameString);
-
-        //     } else if (line.contains("eventSize")) {
-        //         String[] tokens = line.split(":");
-        //         if (tokens[1].trim().endsWith(",")) {
-        //             tokens[1] = tokens[1].trim().substring(0,tokens[1].length()-1); //remove the comma
-        //         }
-        //         String eventSizeString = tokens[1].trim();
-        //         event.setEventSize(Integer.parseInt(eventSizeString));
-
-        // }
 
         return events;
 
@@ -114,8 +86,9 @@ public class DatabaseService {
         
         redisRepository.updateValue(ConstantVar.redisKey, String.valueOf(event.getEventId()), event.toString()); 
     }
+    
     public Boolean checkIfUserOver21(User user) {
-        Date dobDate = user.getDOB(); // Assuming getDOB() returns a Date
+        Date dobDate = user.getDOB(); 
         
         // Convert Date to LocalDate
         LocalDate dob = dobDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
