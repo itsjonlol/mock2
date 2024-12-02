@@ -37,6 +37,13 @@ public class EventmanagementApplication implements CommandLineRunner {
 			System.out.println(events.size()); 
 		}
 		//if dont want to refresh, can add if events.size!=0 then add condition.
+		// if (redisRepository.getNumberOfEvents() == 0) {
+		// 	List<Event> events = dataBaseService.readFile("events.json");
+		// 	for (Event event : events) {
+		// 		System.out.println(event.toString());
+		// 		redisRepository.saveRecord(event);
+		// 	}
+		// }
 	
 	 
 
