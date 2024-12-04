@@ -56,19 +56,50 @@ public class RegistrationController {
         databaseService.updateEventParticipation(event);
 
         //to pass on attributes. BUT must be a redirect
-        redirectAttributes.addFlashAttribute("eventsuccess",event);
-
-        return "redirect:/registration/register";
+        model.addAttribute("eventsuccess",event); // cnanot use this as this is not stored if NOT redirecting
+        // redirectAttributes.addFlashAttribute("eventsuccess",event);
+        return "view2";
+        // return "redirect:/registration/register";
     }
     
 
     // TODO: Task 7
-    
+    //IF YOU ARE PLANNING TO REDIRECT -> you must use redirectattributes
     @GetMapping("/registration/register")
     public String successPage(@ModelAttribute("eventsuccess") Event event,Model model) {
+        
         model.addAttribute("eventsuccess",event);
         return "view2";
     }
+    //this also works. attribute is added to the model
+    // @GetMapping("/registration/register")
+    // public String successPage() {
+    
+    //     return "view2";
+    // }
+
+//     @PostMapping("/events/register")
+// public String processRegistration(@ModelAttribute("user") User user, Model model) {
+//     Event event = databaseService.getEventById(user.getEventId());
+    
+//     // Add event data to the model to be used in the view
+//     model.addAttribute("event", event);
+
+//     return "registration-success";  // Directly return the view name
+// }
+
+// @GetMapping("/registration-success")
+// public String showSuccessPage(Model model) {
+//     // The event will already be available in the model if passed from the previous method BECAUSE SAME REQUEST CYCLE
+//     Event event = (Event) model.getAttribute("event");
+//     // Continue processing logic with the event
+//     return "success";
+// }
+
+
+   
+
+
 
     @GetMapping("/registration/registerfail") 
     public String errorPage(@ModelAttribute("eventfail")Event event, @ModelAttribute("userfail") User user,Model model) {
