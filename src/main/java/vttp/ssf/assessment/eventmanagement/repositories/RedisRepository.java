@@ -1,10 +1,16 @@
 package vttp.ssf.assessment.eventmanagement.repositories;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 import vttp.ssf.assessment.eventmanagement.constant.ConstantVar;
 import vttp.ssf.assessment.eventmanagement.models.Event;
 
@@ -22,6 +28,22 @@ public class RedisRepository {
 		// template.opsForHash().put(ConstantVar.redisKey,event.getEventId(),event.toString());
 	}
 	
+	public void saveRecord2(Event event) {
+		// private Integer eventId;
+		// private String eventName;
+		// private Integer eventSize;
+		// private Long eventDate;
+		// private Integer participants;
+
+		JsonObject eventJsonObject = Json.createObjectBuilder()
+										 .add("eventId",event.getEventId())
+										 .add("eventName",event.getEventName())
+										 .add("eventSize",event.getEventSize())
+										 .add("eventDate",event.getEventDate())
+										 .add("participants",event.getParticipants())
+										 .build();
+		template.opsForHash().put(ConstantVar.redisKey,String.valueOf(event.getEventId()),eventJsonObject.toString());
+	}
 
 	// TODO: Task 3
 	public Integer getNumberOfEvents() {
@@ -48,6 +70,29 @@ public class RedisRepository {
 		event.setParticipants(participants);
 
 		return event;
+	}
+
+	public Event getEvent2(Integer index) {
+		String rawDataJsonString = (String) template.opsForHash().get(ConstantVar.redisKey,String.valueOf(index));
+		InputStream is = new ByteArrayInputStream(rawDataJsonString.getBytes());
+        JsonReader reader = Json.createReader(is);
+        JsonObject dataJson = reader.readObject();
+		
+		Event event = new Event();
+		Integer eventId = dataJson.getInt("eventId");
+		String eventName = dataJson.getString("eventName");
+		Integer eventSize = dataJson.getInt("eventSize");
+		Long eventDate = dataJson.getJsonNumber("eventDate").longValue();
+		Integer participants = dataJson.getInt("participants");
+		event.setEventId(eventId);
+		event.setEventName(eventName);
+		event.setEventSize(eventSize);
+		event.setEventDate(eventDate);
+		event.setParticipants(participants);
+
+		return event;
+
+
 	}
 
 	public void updateValue(String redisKey,String mapKey,String value) {

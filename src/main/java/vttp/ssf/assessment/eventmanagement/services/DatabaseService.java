@@ -72,21 +72,32 @@ public class DatabaseService {
         System.out.println(numberOfEvents);
         List<Event> events = new ArrayList<>();
         for (int i = 0; i<numberOfEvents;i++) {
-            Event event = redisRepository.getEvent(i+1);
+            // Event event = redisRepository.getEvent(i+1);
+            Event event = redisRepository.getEvent2(i+1);
             events.add(event);
 
         }
         return events;
     }
-
+    //for event.tostring
     public Event getEventById(Integer eventId) {
         return redisRepository.getEvent(eventId);
     }
+    //for eventjsonstring
+    public Event getEventById2(Integer eventId) {
+        return redisRepository.getEvent2(eventId);
+    }
+
+    
+
     public void updateEventParticipation(Event event) {//update the event itself, not via id else no changes will be made
         
         redisRepository.updateValue(ConstantVar.redisKey, String.valueOf(event.getEventId()), event.toString()); 
     }
-    
+    public void updateEventParticipation2(Event event) {//update the event itself, not via id else no changes will be made
+        
+        redisRepository.saveRecord2(event);
+    }
     public Boolean checkIfUserOver21(User user) {
         Date dobDate = user.getDOB(); 
         

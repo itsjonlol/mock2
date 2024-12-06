@@ -29,7 +29,8 @@ public class RegistrationController {
 	public String register(@PathVariable("eventid") Integer eventId,Model model) {
         User user = new User();
         model.addAttribute("user",user);
-        Event event = databaseService.getEventById(eventId);
+        // Event event = databaseService.getEventById(eventId);
+        Event event = databaseService.getEventById2(eventId);
         model.addAttribute("event",event);
 		return "view1";
 	}
@@ -37,7 +38,8 @@ public class RegistrationController {
     @PostMapping("/events/register/{eventid}") // i want it to still be the same registration event id
     public String processRegistration(@PathVariable("eventid") Integer eventId,@Valid @ModelAttribute User user,BindingResult result,Model model,
     RedirectAttributes redirectAttributes) {
-        Event event = databaseService.getEventById(eventId);
+        // Event event = databaseService.getEventById(eventId);
+        Event event = databaseService.getEventById2(eventId);
         model.addAttribute("event",event); // need to show back the model
         if (result.hasErrors()) {
             return "view1";
@@ -53,13 +55,17 @@ public class RegistrationController {
         //logic for successful registration
         
         event.setParticipants(event.getParticipants() + user.getTicketsNumber());
-        databaseService.updateEventParticipation(event);
+        // databaseService.updateEventParticipation(event);
+        databaseService.updateEventParticipation2(event);
 
-        //to pass on attributes. BUT must be a redirect
-        model.addAttribute("eventsuccess",event); // cnanot use this as this is not stored if NOT redirecting
-        // redirectAttributes.addFlashAttribute("eventsuccess",event);
+        
+        model.addAttribute("eventsuccess",event); // cannot use this if not redirecting
         return "view2";
+        //to pass on attributes. BUT must be a redirect
+        // redirectAttributes.addFlashAttribute("eventsuccess",event);
         // return "redirect:/registration/register";
+       
+        
     }
     
 
@@ -71,6 +77,17 @@ public class RegistrationController {
         model.addAttribute("eventsuccess",event);
         return "view2";
     }
+
+    @GetMapping("/registration/registerfail") 
+    public String errorPage(@ModelAttribute("eventfail")Event event, @ModelAttribute("userfail") User user,Model model) {
+        
+        boolean isUserOver21 = databaseService.checkIfUserOver21(user);
+        boolean isEventFull = databaseService.checkIfEventFull(event, user.getTicketsNumber());
+        model.addAttribute("isUserOver21",isUserOver21);
+        model.addAttribute("isEventFull",isEventFull);
+        return "view3";
+    }
+
     //this also works. attribute is added to the model
     // @GetMapping("/registration/register")
     // public String successPage() {
@@ -101,14 +118,6 @@ public class RegistrationController {
 
 
 
-    @GetMapping("/registration/registerfail") 
-    public String errorPage(@ModelAttribute("eventfail")Event event, @ModelAttribute("userfail") User user,Model model) {
-        
-        boolean isUserOver21 = databaseService.checkIfUserOver21(user);
-        boolean isEventFull = databaseService.checkIfEventFull(event, user.getTicketsNumber());
-        model.addAttribute("isUserOver21",isUserOver21);
-        model.addAttribute("isEventFull",isEventFull);
-        return "view3";
-    }
+   
 }
 

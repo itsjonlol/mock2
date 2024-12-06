@@ -25,6 +25,7 @@ public class EventController {
 
 
 		
+		
 		List<Event> events = databaseService.getEvents();
 		model.addAttribute("events", events);
 		return "view0";
