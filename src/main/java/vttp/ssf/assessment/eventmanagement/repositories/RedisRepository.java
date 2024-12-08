@@ -47,8 +47,10 @@ public class RedisRepository {
 
 	// TODO: Task 3
 	public Integer getNumberOfEvents() {
-		return (int) (long) template.opsForHash().size(ConstantVar.redisKey);
+		// return (int) (long) template.opsForHash().size(ConstantVar.redisKey);
+		return template.opsForHash().size(ConstantVar.redisKey).intValue();
 	}
+	
 
 	
 
