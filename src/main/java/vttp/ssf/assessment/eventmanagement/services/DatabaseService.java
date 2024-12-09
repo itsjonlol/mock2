@@ -122,4 +122,7 @@ public class DatabaseService {
 
         return false;
     }
+    public Boolean doesRedisKeyExist() {
+        return redisRepository.hashExists(ConstantVar.redisKey);
+    }
 }

@@ -27,7 +27,12 @@ public class EventmanagementApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
+		// if (!redisRepository.)
+		// if (!dataBaseService.doesRedisKeyExist()) {
+		// 	dataBaseService.readFile("events.json");
 
+		// }
+		
 		if (redisRepository.getNumberOfEvents()==0) {
 			List<Event> events = dataBaseService.readFile("events.json");
 			for (Event event : events) {

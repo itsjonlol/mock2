@@ -100,4 +100,7 @@ public class RedisRepository {
 	public void updateValue(String redisKey,String mapKey,String value) {
         template.opsForHash().put(redisKey, mapKey,value); //hset c01 email fred@gmail.com
     }
+	public Boolean hashExists(String redisKey) {
+        return template.hasKey(redisKey);
+    }
 }

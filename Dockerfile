@@ -20,7 +20,7 @@ COPY src src
 # Ensure the mvnw script has execution permissions
 RUN chmod +x mvnw
 
-# Build the application; might have to use mvn instead of /mvnw
+# Build the application; might have to use mvn instead of ./mvnw
 RUN mvn clean package -Dmaven.test.skip=true 
 
 # Set the server port
