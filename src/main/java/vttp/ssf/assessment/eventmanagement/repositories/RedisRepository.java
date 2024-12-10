@@ -27,7 +27,7 @@ public class RedisRepository {
 		template.opsForHash().put(ConstantVar.redisKey,String.valueOf(event.getEventId()),event.toString()); // put string cause of serializer
 		// template.opsForHash().put(ConstantVar.redisKey,event.getEventId(),event.toString());
 	}
-	
+	//event -> eventjsonobject -> eventjsonobjectstring
 	public void saveRecord2(Event event) {
 		// private Integer eventId;
 		// private String eventName;
@@ -73,7 +73,7 @@ public class RedisRepository {
 
 		return event;
 	}
-
+	//eventjsonstring -> eventjson object -> event 
 	public Event getEvent2(Integer index) {
 		String rawDataJsonString = (String) template.opsForHash().get(ConstantVar.redisKey,String.valueOf(index));
 		InputStream is = new ByteArrayInputStream(rawDataJsonString.getBytes());

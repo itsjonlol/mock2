@@ -32,7 +32,7 @@ public class EventmanagementApplication implements CommandLineRunner {
 		// 	dataBaseService.readFile("events.json");
 
 		// }
-		
+		//read once; save list of events into redis
 		if (redisRepository.getNumberOfEvents()==0) {
 			List<Event> events = dataBaseService.readFile("events.json");
 			for (Event event : events) {
